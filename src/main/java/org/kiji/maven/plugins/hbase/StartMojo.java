@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
@@ -266,6 +267,8 @@ public class StartMojo extends AbstractMojo {
 
     // Set any extra hadoop options.
     Configuration conf = new Configuration();
+    // ensure that the base HBase properties also get added
+    conf.addResource("hbase-default.xml");
     if (null != mHadoopConfiguration) {
       for (Map.Entry<Object, Object> property : mHadoopConfiguration.entrySet()) {
         String confKey = property.getKey().toString();

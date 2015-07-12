@@ -20,7 +20,7 @@
 
   <groupId>org.kiji.maven.plugins</groupId>
   <artifactId>hbase-maven-plugin</artifactId>
-  <version>1.0.11-cdh4-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>hbase-maven-plugin</name>
@@ -46,10 +46,10 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
-    <scm.connection>scm:git:ssh://git@github.com/kijiproject/hbase-maven-plugin.git</scm.connection>
-    <hadoop.version>2.0.0-mr1-cdh4.3.0</hadoop.version>
-    <hbase.version>0.94.6-cdh4.3.0</hbase.version>
-    <guava.version>11.0.2</guava.version>
+    <scm.connection>scm:git:ssh://git@github.com/jyates/hbase-maven-plugin.git</scm.connection>
+
+    <hadoop.version>2.5.1</hadoop.version>
+    <hbase.version>1.1.2-SNAPSHOT</hbase.version>
     <slf4j.version>1.6.1</slf4j.version>
   </properties>
 
@@ -84,28 +84,70 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>${guava.version}</version>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.2</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- HBase dependencies -->
     <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-client</artifactId>
-      <version>${hadoop.version}</version>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-server</artifactId>
+      <version>${hbase.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-server</artifactId>
+      <type>test-jar</type>
+      <scope>compile</scope>
+      <version>${hbase.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-client</artifactId>
+      <version>${hbase.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-hadoop-compat</artifactId>
+      <version>${hbase.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-hadoop-compat</artifactId>
+      <version>${hbase.version}</version>
+      <type>test-jar</type>
       <scope>compile</scope>
     </dependency>
-    <!--<dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-core</artifactId>
-      <version>${hadoop.version}</version>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-hadoop2-compat</artifactId>
+      <version>${hbase.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-hadoop2-compat</artifactId>
+      <version>${hbase.version}</version>
+      <type>test-jar</type>
       <scope>compile</scope>
-    </dependency>-->
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-common</artifactId>
+      <version>${hbase.version}</version>
+      <type>test-jar</type>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-it</artifactId>
+      <version>${hbase.version}</version>
+      <type>test-jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- Hadoop dependencies -->
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-minicluster</artifactId>
@@ -122,49 +164,76 @@
     </dependency>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-test</artifactId>
+      <artifactId>hadoop-common</artifactId>
       <version>${hadoop.version}</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.hbase</groupId>
-      <artifactId>hbase</artifactId>
-      <version>${hbase.version}</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>avro</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.thrift</groupId>
-          <artifactId>thrift</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-auth</artifactId>
+      <version>${hadoop.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.hbase</groupId>
-      <artifactId>hbase</artifactId>
-      <version>${hbase.version}</version>
-      <scope>compile</scope>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-client</artifactId>
+      <version>${hadoop.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-mapreduce-client-core</artifactId>
+      <version>${hadoop.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
+      <version>${hadoop.version}</version>
       <type>test-jar</type>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.hadoop</groupId>
-          <artifactId>avro</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.thrift</groupId>
-          <artifactId>thrift</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.avro</groupId>
-      <artifactId>avro</artifactId>
-      <version>1.6.3</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>${hadoop.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>${hadoop.version}</version>
+      <type>test-jar</type>
+      <scope>compile</scope>
+    </dependency>
+    <!-- Hadoop needs Netty 3.x at test scope for the minicluster -->
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty</artifactId>
+      <version>3.6.2.Final</version>
+    </dependency>
+
+    <!-- Plugin building dependencies -->
+    <!--<dependency>-->
+      <!--<groupId>org.apache.maven</groupId>-->
+      <!--<artifactId>maven-plugin-api</artifactId>-->
+      <!--<version>2.0</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+      <!--<groupId>org.apache.maven.plugin-tools</groupId>-->
+      <!--<artifactId>maven-plugin-annotations</artifactId>-->
+      <!--<version>3.4</version>-->
+    <!--</dependency>-->
+  <!--</dependencies>-->
+
+
+
+   <!--Original HBase exclusions -->
+      <!--<exclusions>-->
+        <!--<exclusion>-->
+          <!--<groupId>org.apache.hadoop</groupId>-->
+          <!--<artifactId>avro</artifactId>-->
+        <!--</exclusion>-->
+        <!--<exclusion>-->
+          <!--<groupId>org.apache.thrift</groupId>-->
+          <!--<artifactId>thrift</artifactId>-->
+        <!--</exclusion>-->
+      <!--</exclusions>-->
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact</artifactId>
@@ -181,12 +250,6 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-project</artifactId>
       <version>2.2.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.thrift</groupId>
-      <artifactId>libthrift</artifactId>
-      <version>0.5.0-cdh</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

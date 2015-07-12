@@ -17,14 +17,14 @@
 
 package org.kiji.maven.plugins.hbase;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.Random;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.maven.plugin.logging.Log;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.Random;
 
 /**
  * A in-process mini HBase cluster that may be started and stopped.
@@ -92,9 +92,9 @@ public class MiniHBaseCluster extends MavenLogged {
     if (isRunning()) {
       throw new RuntimeException("Cluster already running.");
     }
+
     mTestUtil.startMiniCluster();
     if (mIsMapReduceEnabled) {
-      getLog().info("Starting MapReduce cluster...");
 
       // Work around a bug in HBaseTestingUtility that requires this conf var to be set.
       getConfiguration().set("hadoop.log.dir", getConfiguration().get("hadoop.tmp.dir"));
@@ -105,8 +105,6 @@ public class MiniHBaseCluster extends MavenLogged {
       // Set the mapred.working.dir so stuff like partition files get written somewhere reasonable.
       getConfiguration().set("mapred.working.dir",
           mTestUtil.getDataTestDir("mapred-working").toString());
-
-      getLog().info("MapReduce cluster started.");
     }
     mIsRunning = true;
   }
