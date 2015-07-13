@@ -232,6 +232,8 @@ public class StartMojo extends BaseClusterMojo {
     Configuration conf = new Configuration();
     // ensure that the base HBase properties also get added
     conf.addResource("hbase-default.xml");
+    // ignore the version of the users of the running cluster.
+    conf.setBoolean("hbase.defaults.for.version.skip", true);
     if (null != mHadoopConfiguration) {
       for (Map.Entry<Object, Object> property : mHadoopConfiguration.entrySet()) {
         String confKey = property.getKey().toString();
