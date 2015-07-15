@@ -12,6 +12,8 @@ public class RunMojo extends StartMojo {
   public void execute() throws MojoExecutionException {
     super.execute();
     try {
+      getLog().info("Namenode UI present at: http://" +  MiniHBaseClusterSingleton.INSTANCE
+        .getClusterConfiguration().get("dfs.namenode.http-address")+"/webapps/hdfs/");
       getLog().info("Running cluster until interrupted....");
       MiniHBaseClusterSingleton.INSTANCE.waitUntilDone();
     } catch (InterruptedException e) {
